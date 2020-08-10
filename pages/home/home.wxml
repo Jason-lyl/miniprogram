@@ -1,0 +1,59 @@
+组件属性需要再双引号之内 
+<view id="item-{{id}}">{{ message }}</view>
+
+/// 控制属性需要再双引号之内
+<view wx:if="{{condition}}"></view>
+
+<view hidden="{{ falg ? true : false }}"> Hidden </view>
+
+/// 算法运算
+<view> {{a + b}} + {{c}} + d </view>
+
+/// 逻辑判断
+<view wx: if="{{length > 5}}"></view>
+
+/// 字符串运算
+<view>{{"hello" + name}}</view>
+
+//数据路径运算
+<view>{{object.key}} {{array[0]}}</view>
+
+//对象
+<template is="objectCombine" data="{{for: a, bar: b}}"></template>
+
+//列表渲染
+// wx: for-item 可以指定数组当前元素的变量名
+// wx:for-index 可以指定数组当前下标的变量名
+<view wx:for="{{array}}">{{index}} : {{item.message}}</view>
+<view wx:for="{{array}}" wx:for-index="idx" wx:for-item=itemName""> {{indx}} : {{itemName.message}} </view>
+
+// wx: for 也可以嵌套
+<view wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9]}}" wx:for-item="i">
+  <view wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9]}}" wx:for-item="j"></view>
+    <view wx:if="{{ i <= j}}">
+      {{i}} * {{j}} = {{i * j}}
+    </view>
+</view>
+
+// block wx:if, 也可以将 wx:for 用在<block/> 标签行，以渲染一个包含多节点的结构快。例如：
+<block>
+  <view> {{index}}: </view>
+  <view> {{item}} </view>
+</block>
+
+// wx:key
+// 如果列表中的项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 input 中的输入内容， switch 的选中状态）, 需要使用 wx:key 来指定列表中项目的唯一标识符。
+<!-- 
+  wx: key 的值以两种形式提供
+  1. 字符串， 代表for 循环的array 中 item 的某个property, 改 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
+  2. 保留关键字 *this 代表在for 循环中的 item 本身， 这种表示需要item 本身是一个惟一的字符串或者数字。
+  当数据改变触犯渲染层重新渲染的时候，会矫正带有key 的组件，框架会确保他们被重新排序， 而不是重新创建， 以确保该组件保持自身的状态， 并且提高列表渲染时的效率。
+ -->
+
+ <switch wx:for="{{objectArray}}" wx:key="unique" style="display: block;"> {{item.id}} </switch>
+ <button bindtap="switch"> Switch </button>
+ <button bindtap="addToFront"> Add to the front </button>
+
+ <switch wx:for="{{numberArray}}" wx:key="*this" style="display: block;">{{item}}</switch>
+ <button bindtap="addNumberToFront"> Add to the front </button>
+
