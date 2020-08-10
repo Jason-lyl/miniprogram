@@ -1,0 +1,5 @@
+
+var tool = require("./tool.wxs");
+console.log(tool.FOO);
+console.log(tool.bar("otherTool.wxs"));
+console.log(tool.msg);

@@ -1,33 +1,33 @@
-组件属性需要再双引号之内 
+<!-- 组件属性需要再双引号之内  -->
 <view id="item-{{id}}">{{ message }}</view>
 
-/// 控制属性需要再双引号之内
+<!-- /// 控制属性需要再双引号之内 -->
 <view wx:if="{{condition}}"></view>
 
 <view hidden="{{ falg ? true : false }}"> Hidden </view>
 
-/// 算法运算
+<!-- /// 算法运算 -->
 <view> {{a + b}} + {{c}} + d </view>
 
-/// 逻辑判断
+<!-- /// 逻辑判断 -->
 <view wx: if="{{length > 5}}"></view>
 
-/// 字符串运算
+<!-- /// 字符串运算 -->
 <view>{{"hello" + name}}</view>
 
-//数据路径运算
+<!-- //数据路径运算 -->
 <view>{{object.key}} {{array[0]}}</view>
 
-//对象
+<!-- //对象 -->
 <template is="objectCombine" data="{{for: a, bar: b}}"></template>
 
-//列表渲染
+<!-- //列表渲染
 // wx: for-item 可以指定数组当前元素的变量名
-// wx:for-index 可以指定数组当前下标的变量名
+// wx:for-index 可以指定数组当前下标的变量名 -->
 <view wx:for="{{array}}">{{index}} : {{item.message}}</view>
-<view wx:for="{{array}}" wx:for-index="idx" wx:for-item=itemName""> {{indx}} : {{itemName.message}} </view>
+<!-- <view wx:for="{{array}}" wx:for-index="idx" wx:for-item=itemName""> {{indx}} : {{itemName.message}} </view> -->
 
-// wx: for 也可以嵌套
+<!-- // wx: for 也可以嵌套 -->
 <view wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9]}}" wx:for-item="i">
   <view wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9]}}" wx:for-item="j"></view>
     <view wx:if="{{ i <= j}}">
@@ -35,14 +35,14 @@
     </view>
 </view>
 
-// block wx:if, 也可以将 wx:for 用在<block/> 标签行，以渲染一个包含多节点的结构快。例如：
+<!-- // block wx:if, 也可以将 wx:for 用在<block/> 标签行，以渲染一个包含多节点的结构快。例如： -->
 <block>
   <view> {{index}}: </view>
   <view> {{item}} </view>
 </block>
 
-// wx:key
-// 如果列表中的项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 input 中的输入内容， switch 的选中状态）, 需要使用 wx:key 来指定列表中项目的唯一标识符。
+<!-- // wx:key
+// 如果列表中的项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 input 中的输入内容， switch 的选中状态）, 需要使用 wx:key 来指定列表中项目的唯一标识符。 -->
 <!-- 
   wx: key 的值以两种形式提供
   1. 字符串， 代表for 循环的array 中 item 的某个property, 改 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
@@ -56,4 +56,35 @@
 
  <switch wx:for="{{numberArray}}" wx:key="*this" style="display: block;">{{item}}</switch>
  <button bindtap="addNumberToFront"> Add to the front </button>
+
+<!-- 引用 wxs -->
+<wxs src="./../tool.wxs" module="tool" />
+<view>{{tool.msg}}</view>
+<view>{{tool.bar(tool.FOO)}}</view>
+
+<wxs src="./../otherTool.wxs" module="otherTool" />
+<!-- 
+  module 属性
+  module 属性是当前 <wxs> 标签的模块名，在单个wxml 文件内，建议其值唯一。有重复模块名则按照先后顺序覆盖（后者覆盖前者）。不同文件之间的wxs模块名不会相互覆盖。
+ -->
+ <wxs module="foo">
+ var some_msg = "hello word";
+ module.exports = {
+   msg: some_msg,
+ }
+ </wxs>
+ <view>{{foo.msg}}</view>
+
+<!-- 
+  src 属性
+  src 属性可以引用其他wxs 文件模块
+  引用的时候，要注意一下几点：
+  1: 只能引用 .wxs 文件模块 ，且必须使用相对模块。
+  2: wxs 模块 均为单利， wxs 模块在第一次被引用时， 会自动初始化为单利对象。多个页面，多个地方，多次引用，使用的都是同一个wxs 模块对象。
+  3: 如果一个 wxs 模块在定义之后，一直没有被引用，则该模块不会被解析与运行。
+ -->
+ <wxs src="./../tool.wxs " module="some_comms"> <wxs/>
+<view>{{some_comms.bar(some_comms.foo)}}</view>
+<view>{{some_comms.bar(msg)}}</view>
+
 

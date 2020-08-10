@@ -29,6 +29,7 @@ Page({
 
     ],
     numberArray: [1, 2, 3, 4, 5],
+    msg: "hello word from home.js"
 
      
   },
